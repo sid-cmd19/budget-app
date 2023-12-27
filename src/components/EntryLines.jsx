@@ -3,11 +3,16 @@ import { Container } from "semantic-ui-react";
 
 import EntryLine from "../components/EntryLine";
 
-const EntryLines = ({ entries, deleteEntry }) => {
+const EntryLines = ({ entries, deleteEntry, editEntry }) => {
   return (
     <Container>
       {entries.map((entry) => (
-        <EntryLine key={entry.id} {...entry} deleteEntry={deleteEntry} />
+        <EntryLine
+          key={entry.id}
+          {...entry}
+          deleteEntry={deleteEntry}
+          editEntry={editEntry}
+        />
       ))}
     </Container>
   );

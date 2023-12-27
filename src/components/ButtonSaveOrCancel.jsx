@@ -6,7 +6,7 @@ const ButtonSaveOrCancel = ({ addEntry, description, value, isExpense }) => {
     <Button.Group style={{ margin: 20 }}>
       <Button>Cancel</Button>
       <Button.Or />
-      <Button primary onClick={() => addEntry(description, value, isExpense)}>
+      <Button primary onClick={addEntry}>
         Add
       </Button>
     </Button.Group>
