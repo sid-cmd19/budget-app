@@ -8,6 +8,7 @@ import DisplayBalances from "./components/DisplayBalances";
 // import EntryLine from "./components/EntryLine";
 import EntryLines from "./components/EntryLines";
 import ModalEdit from "./components/ModalEdit";
+import { createStore, combineReducers } from "redux";
 
 function App() {
   const [entries, setEntries] = useState(initialEntries);
@@ -50,6 +51,54 @@ function App() {
       `Toatl expenses is ${totalExpenses} and total income is ${totalIncomes}`
     );
   }, [entries]);
+
+  function entriesReducer(state = initialEntries, action) {
+    // console.log("action: ", action); Reducers should not have side effects
+    let newEntries;
+    switch (action.type) {
+      case "ADD_ENTRY":
+        newEntries = state.concat({ ...action.payload });
+        return newEntries;
+
+      case "REMOVE_ENTRY":
+        newEntries = state.filter((entry) => entry.id !== action.payload.id);
+        return newEntries;
+
+      default:
+        return state;
+    }
+  }
+
+  const combinedReducers = combineReducers({
+    entries: entriesReducer,
+  });
+  const store = createStore(combinedReducers);
+
+  store.subscribe(() => {
+    console.log("store: ", store.getState());
+  });
+  // console.log("store before: ", store.getState());
+  const payload_add = {
+    id: 5,
+    description: "Hello from redux",
+    value: 120,
+    isExpense: false,
+  };
+
+  const payload_remove = 1;
+
+  function addEntryRedux(payload) {
+    return { type: "ADD_ENTRY", payload };
+  }
+
+  function removeEntryRedux(id) {
+    return { type: "REMOVE_ENTRY", payload: { id } };
+  }
+
+  store.dispatch(addEntryRedux(payload_add));
+  // store.dispatch(addEntryRedux(payload_add));
+  store.dispatch(removeEntryRedux(payload_remove));
+  store.dispatch(removeEntryRedux(2));
 
   function deleteEntry(id) {
     const result = entries.filter((entry) => entry.id !== id);
