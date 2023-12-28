@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Container } from "semantic-ui-react";
-import "./App.css";
 import MainHeader from "./components/MainHeader";
 import NewEntryForm from "./components/NewEntryForm";
 import DisplayBalance from "./components/DisplayBalance";
 import DisplayBalances from "./components/DisplayBalances";
-// import EntryLine from "./components/EntryLine";
 import EntryLines from "./components/EntryLines";
 import ModalEdit from "./components/ModalEdit";
-import { createStore, combineReducers } from "redux";
+import configureStore from "./store/configureStore";
+
+import "./App.css";
 
 function App() {
   const [entries, setEntries] = useState(initialEntries);
@@ -20,6 +20,8 @@ function App() {
   const [totalExpense, setTotalExpense] = useState(0);
   const [totalIncome, setTotalIncome] = useState(0);
   const [total, setTotal] = useState(0);
+  // eslint-disable-next-line
+  const store = configureStore();
 
   useEffect(() => {
     if (!isOpen && entryId) {
@@ -31,12 +33,13 @@ function App() {
       setEntries(newEntries);
       resetEntry();
     }
+    // eslint-disable-next-line
   }, [isOpen]);
 
   useEffect(() => {
     let totalIncomes = 0;
     let totalExpenses = 0;
-
+    // eslint-disable-next-line
     entries.map((entry) => {
       if (entry.isExpense) {
         totalExpenses += Number(entry.value);
@@ -52,53 +55,23 @@ function App() {
     );
   }, [entries]);
 
-  function entriesReducer(state = initialEntries, action) {
-    // console.log("action: ", action); Reducers should not have side effects
-    let newEntries;
-    switch (action.type) {
-      case "ADD_ENTRY":
-        newEntries = state.concat({ ...action.payload });
-        return newEntries;
-
-      case "REMOVE_ENTRY":
-        newEntries = state.filter((entry) => entry.id !== action.payload.id);
-        return newEntries;
-
-      default:
-        return state;
-    }
-  }
-
-  const combinedReducers = combineReducers({
-    entries: entriesReducer,
-  });
-  const store = createStore(combinedReducers);
-
-  store.subscribe(() => {
-    console.log("store: ", store.getState());
-  });
+  // store.subscribe(() => {
+  //   console.log("store: ", store.getState());
+  // });
   // console.log("store before: ", store.getState());
-  const payload_add = {
-    id: 5,
-    description: "Hello from redux",
-    value: 120,
-    isExpense: false,
-  };
+  // const payload_add = {
+  //   id: 5,
+  //   description: "Hello from redux",
+  //   value: 120,
+  //   isExpense: false,
+  // };
 
-  const payload_remove = 1;
+  // const payload_remove = 1;
 
-  function addEntryRedux(payload) {
-    return { type: "ADD_ENTRY", payload };
-  }
-
-  function removeEntryRedux(id) {
-    return { type: "REMOVE_ENTRY", payload: { id } };
-  }
-
-  store.dispatch(addEntryRedux(payload_add));
   // store.dispatch(addEntryRedux(payload_add));
-  store.dispatch(removeEntryRedux(payload_remove));
-  store.dispatch(removeEntryRedux(2));
+  // // store.dispatch(addEntryRedux(payload_add));
+  // store.dispatch(removeEntryRedux(payload_remove));
+  // store.dispatch(removeEntryRedux(2));
 
   function deleteEntry(id) {
     const result = entries.filter((entry) => entry.id !== id);

@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { Container, Grid, Icon, Segment } from "semantic-ui-react";
-import ModalEdit from "./ModalEdit";
+import React from "react";
+import { Grid, Icon, Segment } from "semantic-ui-react";
 
 const EntryLine = ({
   id,
