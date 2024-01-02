@@ -10,6 +10,14 @@ const reducer = (state = initialEntries, action) => {
       newEntries = state.filter((entry) => entry.id !== action.payload.id);
       return newEntries;
 
+    case "UPDATE_ENTRY":
+      newEntries = [...state];
+      const index = newEntries.findIndex(
+        (entry) => entry.id === action.payload.id
+      );
+      newEntries[index] = { ...action.payload.entry };
+      return newEntries;
+
     default:
       return state;
   }
@@ -20,7 +28,7 @@ export default reducer;
 var initialEntries = [
   {
     id: 1,
-    description: "Work Income",
+    description: "Work Income redux",
     value: 100.0,
     isExpense: false,
   },
